@@ -1,23 +1,40 @@
+use crate::WindowDescriptor;
 use winit::application::ApplicationHandler;
+use winit::dpi::PhysicalSize;
 use winit::event::WindowEvent;
 use winit::event_loop::{ActiveEventLoop, EventLoop};
 use winit::window::{Window, WindowId};
 
-pub fn run() {
-  let event_loop = EventLoop::new();
-  let mut app = App::default();
+pub fn run(descriptor: WindowDescriptor) {
+  let event_loop = EventLoop::new().expect("failed to create event loop");
 
-  event_loop.unwrap().run_app(&mut app).unwrap()
+  let mut app = App {
+    descriptor,
+    window: None,
+  };
+
+  event_loop.run_app(&mut app).expect("event loop failed");
 }
 
-#[derive(Default)]
 struct App {
+  descriptor: WindowDescriptor,
   window: Option<Window>,
 }
 
 impl ApplicationHandler for App {
   fn resumed(&mut self, event_loop: &ActiveEventLoop) {
-    self.window = event_loop.create_window(Window::default_attributes()).ok();
+    let attributes = Window::default_attributes()
+      .with_title(self.descriptor.title.as_str())
+      .with_inner_size(PhysicalSize::new(
+        self.descriptor.inner_size.width,
+        self.descriptor.inner_size.height,
+      ));
+
+    self.window = Some(
+      event_loop
+        .create_window(attributes)
+        .expect("failed to create window"),
+    );
   }
 
   fn window_event(
