@@ -5,6 +5,7 @@ use raw_window_handle::{
 use std::sync::Arc;
 use winit::window::Window as WinitWindow;
 
+#[derive(Clone)]
 pub struct Window {
   inner: Arc<WinitWindow>,
 }
