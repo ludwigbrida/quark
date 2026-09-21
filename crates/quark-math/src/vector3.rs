@@ -1,4 +1,4 @@
-use std::ops::{Mul, Sub, SubAssign};
+use std::ops::{Mul, MulAssign, Sub, SubAssign};
 
 pub struct Vector3 {
   pub x: f32,
@@ -35,5 +35,13 @@ impl Mul for Vector3 {
       y: self.y * rhs.y,
       z: self.z * rhs.z,
     }
+  }
+}
+
+impl MulAssign for Vector3 {
+  fn mul_assign(&mut self, rhs: Self) {
+    self.x *= rhs.x;
+    self.y *= rhs.y;
+    self.z *= rhs.z;
   }
 }
