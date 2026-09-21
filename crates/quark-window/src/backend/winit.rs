@@ -65,4 +65,10 @@ impl<A: Application> ApplicationHandler for App<A> {
       _ => {}
     }
   }
+
+  fn about_to_wait(&mut self, _event_loop: &ActiveEventLoop) {
+    if let Some(window) = &self.window {
+      self.application.about_to_wait(window);
+    }
+  }
 }
