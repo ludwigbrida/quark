@@ -9,6 +9,12 @@ pub struct Window {
 }
 
 impl Window {
+  pub(crate) fn new(inner: WinitWindow) -> Self {
+    Self {
+      inner: Arc::new(inner),
+    }
+  }
+
   pub fn request_redraw(&self) {
     self.inner.request_redraw();
   }

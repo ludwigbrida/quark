@@ -1,41 +1,52 @@
-use crate::WindowDescriptor;
 use crate::application::Application;
+use crate::{Window, WindowDescriptor};
 use winit::application::ApplicationHandler;
 use winit::dpi::PhysicalSize;
 use winit::event::WindowEvent;
 use winit::event_loop::{ActiveEventLoop, EventLoop};
-use winit::window::{Window, WindowId};
+use winit::window::{Window as WinitWindow, WindowId};
 
 pub fn run(descriptor: WindowDescriptor, application: impl Application + 'static) {
   let event_loop = EventLoop::new().expect("failed to create event loop");
 
-  let mut app = App {
-    descriptor,
-    window: None,
-  };
-
-  event_loop.run_app(&mut app).expect("event loop failed");
+  event_loop
+    .run_app(&mut App {
+      descriptor,
+      application,
+      window: None,
+    })
+    .expect("event loop failed");
 }
 
-struct App {
+struct App<A> {
   descriptor: WindowDescriptor,
+  application: A,
   window: Option<Window>,
 }
 
-impl ApplicationHandler for App {
+impl<A: Application> ApplicationHandler for App<A> {
   fn resumed(&mut self, event_loop: &ActiveEventLoop) {
-    let attributes = Window::default_attributes()
+    if self.window.is_some() {
+      return;
+    }
+
+    let attributes = WinitWindow::default_attributes()
       .with_title(self.descriptor.title.as_str())
       .with_inner_size(PhysicalSize::new(
         self.descriptor.inner_size.width,
         self.descriptor.inner_size.height,
       ));
 
-    self.window = Some(
+    let window = Window::new(
       event_loop
         .create_window(attributes)
         .expect("failed to create window"),
     );
+
+    self.application.window_created(&window);
+    window.request_redraw();
+
+    self.window = Some(window);
   }
 
   fn window_event(
@@ -44,8 +55,14 @@ impl ApplicationHandler for App {
     _window_id: WindowId,
     event: WindowEvent,
   ) {
-    if matches!(event, WindowEvent::CloseRequested) {
-      event_loop.exit();
+    match event {
+      WindowEvent::CloseRequested => event_loop.exit(),
+      WindowEvent::RedrawRequested => {
+        if let Some(window) = &self.window {
+          self.application.redraw_requested(window);
+        }
+      }
+      _ => {}
     }
   }
 }
