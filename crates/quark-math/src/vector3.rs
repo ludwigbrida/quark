@@ -1,4 +1,4 @@
-use std::ops::{Add, Mul, MulAssign, Sub, SubAssign};
+use std::ops::{Add, AddAssign, Mul, MulAssign, Sub, SubAssign};
 
 pub struct Vector3 {
   pub x: f32,
@@ -29,6 +29,14 @@ impl Add for Vector3 {
       y: self.y + rhs.y,
       z: self.z + rhs.z,
     }
+  }
+}
+
+impl AddAssign for Vector3 {
+  fn add_assign(&mut self, rhs: Self) {
+    self.x += rhs.x;
+    self.y += rhs.y;
+    self.z += rhs.z;
   }
 }
 
