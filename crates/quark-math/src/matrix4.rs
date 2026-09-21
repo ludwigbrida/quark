@@ -1,3 +1,4 @@
+use crate::Vector3;
 use std::ops::{Index, IndexMut, Mul};
 
 #[repr(C)]
@@ -27,6 +28,15 @@ impl Matrix4 {
       [0.0, focal_length, 0.0, 0.0],
       [0.0, 0.0, far * inverse_depth_range, -1.0],
       [0.0, 0.0, far * near * inverse_depth_range, 0.0],
+    ])
+  }
+
+  pub const fn translation(translation: Vector3) -> Self {
+    Self::new([
+      [1.0, 0.0, 0.0, 0.0],
+      [0.0, 1.0, 0.0, 0.0],
+      [0.0, 0.0, 1.0, 0.0],
+      [translation.x, translation.y, translation.z, 1.0],
     ])
   }
 
