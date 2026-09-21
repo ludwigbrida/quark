@@ -1,4 +1,4 @@
-use std::ops::{Sub, SubAssign};
+use std::ops::{Mul, Sub, SubAssign};
 
 pub struct Vector3 {
   pub x: f32,
@@ -23,5 +23,17 @@ impl SubAssign for Vector3 {
     self.x -= rhs.x;
     self.y -= rhs.y;
     self.z -= rhs.z;
+  }
+}
+
+impl Mul for Vector3 {
+  type Output = Self;
+
+  fn mul(self, rhs: Self) -> Self::Output {
+    Self {
+      x: self.x * rhs.x,
+      y: self.y * rhs.y,
+      z: self.z * rhs.z,
+    }
   }
 }
