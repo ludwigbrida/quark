@@ -5,3 +5,7 @@ version = 4
 [[package]]
 name = "quark-math"
 version = "0.0.0"
+
+[[package]]
+name = "quark-window"
+version = "0.0.0"
