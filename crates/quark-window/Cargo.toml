@@ -3,3 +3,6 @@ name = "quark-window"
 version = "0.0.0"
 publish = false
 edition.workspace = true
+
+[dependencies]
+winit = "0.30.13"
