@@ -1,4 +1,4 @@
-use std::ops::{Mul, MulAssign, Sub, SubAssign};
+use std::ops::{Add, Mul, MulAssign, Sub, SubAssign};
 
 pub struct Vector3 {
   pub x: f32,
@@ -16,6 +16,18 @@ impl Vector3 {
       x: self.y * other.z - self.z * other.y,
       y: self.z * other.x - self.x * other.z,
       z: self.x * other.y - self.y * other.x,
+    }
+  }
+}
+
+impl Add for Vector3 {
+  type Output = Self;
+
+  fn add(self, rhs: Self) -> Self::Output {
+    Self {
+      x: self.x + rhs.x,
+      y: self.y + rhs.y,
+      z: self.z + rhs.z,
     }
   }
 }
