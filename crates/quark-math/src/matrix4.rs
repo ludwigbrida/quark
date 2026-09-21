@@ -1,4 +1,4 @@
-use std::ops::{Index, IndexMut};
+use std::ops::{Index, IndexMut, Mul};
 
 #[repr(C)]
 #[derive(Debug, Clone, Copy, PartialEq)]
@@ -34,5 +34,23 @@ impl Index<usize> for Matrix4 {
 impl IndexMut<usize> for Matrix4 {
   fn index_mut(&mut self, column: usize) -> &mut Self::Output {
     &mut self.data[column]
+  }
+}
+
+impl Mul for Matrix4 {
+  type Output = Self;
+
+  fn mul(self, rhs: Self) -> Self::Output {
+    let mut result = Self::new([[0.0; 4]; 4]);
+
+    for column in 0..4 {
+      for row in 0..4 {
+        for index in 0..4 {
+          result[column][row] += self[index][row] * rhs[column][index];
+        }
+      }
+    }
+
+    result
   }
 }
