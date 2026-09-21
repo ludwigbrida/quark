@@ -76,6 +76,15 @@ impl Matrix4 {
     ])
   }
 
+  pub const fn scaling(scale: Vector3) -> Self {
+    Self::new([
+      [scale.x, 0.0, 0.0, 0.0],
+      [0.0, scale.y, 0.0, 0.0],
+      [0.0, 0.0, scale.z, 0.0],
+      [0.0, 0.0, 0.0, 1.0],
+    ])
+  }
+
   pub const fn columns(&self) -> &[[f32; 4]; 4] {
     &self.data
   }
