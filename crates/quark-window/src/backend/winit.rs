@@ -1,5 +1,5 @@
 use crate::application::Application;
-use crate::{Window, WindowDescriptor};
+use crate::{Window, WindowDescriptor, WindowSize};
 use winit::application::ApplicationHandler;
 use winit::dpi::PhysicalSize;
 use winit::event::WindowEvent;
@@ -60,6 +60,17 @@ impl<A: Application> ApplicationHandler for App<A> {
       WindowEvent::RedrawRequested => {
         if let Some(window) = &self.window {
           self.application.redraw_requested(window);
+        }
+      }
+      WindowEvent::Resized(size) => {
+        if let Some(window) = &self.window {
+          self.application.resized(
+            window,
+            WindowSize {
+              width: size.width,
+              height: size.height,
+            },
+          );
         }
       }
       _ => {}
