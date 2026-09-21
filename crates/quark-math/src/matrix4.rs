@@ -1,4 +1,4 @@
-use std::ops::Index;
+use std::ops::{Index, IndexMut};
 
 pub struct Matrix4 {
   data: [[f32; 4]; 4],
@@ -22,5 +22,11 @@ impl Index<usize> for Matrix4 {
 
   fn index(&self, column: usize) -> &Self::Output {
     &self.data[column]
+  }
+}
+
+impl IndexMut<usize> for Matrix4 {
+  fn index_mut(&mut self, column: usize) -> &mut Self::Output {
+    &mut self.data[column]
   }
 }
