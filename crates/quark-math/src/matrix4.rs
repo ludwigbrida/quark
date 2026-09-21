@@ -18,6 +18,18 @@ impl Matrix4 {
     Self { data }
   }
 
+  pub fn perspective(fov_y: f32, aspect: f32, near: f32, far: f32) -> Self {
+    let focal_length = 1.0 / (fov_y / 2.0).tan();
+    let inverse_depth_range = 1.0 / (near - far);
+
+    Self::new([
+      [focal_length / aspect, 0.0, 0.0, 0.0],
+      [0.0, focal_length, 0.0, 0.0],
+      [0.0, 0.0, far * inverse_depth_range, -1.0],
+      [0.0, 0.0, far * near * inverse_depth_range, 0.0],
+    ])
+  }
+
   pub const fn columns(&self) -> &[[f32; 4]; 4] {
     &self.data
   }
