@@ -1,3 +1,4 @@
+use crate::WindowSize;
 use raw_window_handle::{
   DisplayHandle, HandleError, HasDisplayHandle, HasWindowHandle, WindowHandle,
 };
@@ -12,6 +13,15 @@ impl Window {
   pub(crate) fn new(inner: WinitWindow) -> Self {
     Self {
       inner: Arc::new(inner),
+    }
+  }
+
+  pub fn inner_size(&self) -> WindowSize {
+    let size = self.inner.inner_size();
+
+    WindowSize {
+      width: size.width,
+      height: size.height,
     }
   }
 
