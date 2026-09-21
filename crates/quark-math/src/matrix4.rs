@@ -40,6 +40,42 @@ impl Matrix4 {
     ])
   }
 
+  pub fn rotation_x(radians: f32) -> Self {
+    let cosine = radians.cos();
+    let sine = radians.sin();
+
+    Self::new([
+      [1.0, 0.0, 0.0, 0.0],
+      [0.0, cosine, sine, 0.0],
+      [0.0, -sine, cosine, 0.0],
+      [0.0, 0.0, 0.0, 1.0],
+    ])
+  }
+
+  pub fn rotation_y(radians: f32) -> Self {
+    let cosine = radians.cos();
+    let sine = radians.sin();
+
+    Self::new([
+      [cosine, 0.0, -sine, 0.0],
+      [0.0, 1.0, 0.0, 0.0],
+      [sine, 0.0, cosine, 0.0],
+      [0.0, 0.0, 0.0, 1.0],
+    ])
+  }
+
+  pub fn rotation_z(radians: f32) -> Self {
+    let cosine = radians.cos();
+    let sine = radians.sin();
+
+    Self::new([
+      [cosine, sine, 0.0, 0.0],
+      [-sine, cosine, 0.0, 0.0],
+      [0.0, 0.0, 1.0, 0.0],
+      [0.0, 0.0, 0.0, 1.0],
+    ])
+  }
+
   pub const fn columns(&self) -> &[[f32; 4]; 4] {
     &self.data
   }
