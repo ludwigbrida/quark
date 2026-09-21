@@ -1,4 +1,4 @@
-use std::ops::Sub;
+use std::ops::{Sub, SubAssign};
 
 pub struct Vector3 {
   pub x: f32,
@@ -15,5 +15,13 @@ impl Sub for Vector3 {
       y: self.y - rhs.y,
       z: self.z - rhs.z,
     }
+  }
+}
+
+impl SubAssign for Vector3 {
+  fn sub_assign(&mut self, rhs: Self) {
+    self.x -= rhs.x;
+    self.y -= rhs.y;
+    self.z -= rhs.z;
   }
 }
