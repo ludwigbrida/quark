@@ -1,5 +1,6 @@
 use std::ops::{Add, AddAssign, Mul, MulAssign, Sub, SubAssign};
 
+#[derive(Debug, Clone, Copy, Default, PartialEq)]
 pub struct Vector3 {
   pub x: f32,
   pub y: f32,
@@ -7,6 +8,12 @@ pub struct Vector3 {
 }
 
 impl Vector3 {
+  pub const ZERO: Self = Self::new(0.0, 0.0, 0.0);
+
+  pub const fn new(x: f32, y: f32, z: f32) -> Self {
+    Self { x, y, z }
+  }
+
   pub fn dot(self, other: Self) -> f32 {
     self.x * other.x + self.y * other.y + self.z * other.z
   }
