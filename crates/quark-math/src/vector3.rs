@@ -6,6 +6,12 @@ pub struct Vector3 {
   pub z: f32,
 }
 
+impl Vector3 {
+  pub fn dot(self, other: Self) -> f32 {
+    self.x * other.x + self.y * other.y + self.z * other.z
+  }
+}
+
 impl Sub for Vector3 {
   type Output = Self;
 
