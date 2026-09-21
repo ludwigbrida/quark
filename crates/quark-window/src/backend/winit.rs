@@ -1,11 +1,12 @@
 use crate::WindowDescriptor;
+use crate::application::Application;
 use winit::application::ApplicationHandler;
 use winit::dpi::PhysicalSize;
 use winit::event::WindowEvent;
 use winit::event_loop::{ActiveEventLoop, EventLoop};
 use winit::window::{Window, WindowId};
 
-pub fn run(descriptor: WindowDescriptor) {
+pub fn run(descriptor: WindowDescriptor, application: impl Application + 'static) {
   let event_loop = EventLoop::new().expect("failed to create event loop");
 
   let mut app = App {
