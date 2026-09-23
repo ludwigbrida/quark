@@ -1,16 +1,24 @@
-pub use winit::keyboard::KeyCode;
+pub use winit::{event::MouseButton, keyboard::KeyCode};
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
-pub enum KeyState {
+pub enum ButtonState {
   Pressed,
   Released,
 }
 
+pub type KeyState = ButtonState;
+
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub struct KeyInput {
   pub code: KeyCode,
-  pub state: KeyState,
+  pub state: ButtonState,
   pub repeat: bool,
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub struct MouseButtonInput {
+  pub button: MouseButton,
+  pub state: ButtonState,
 }
 
 #[derive(Debug, Clone, Copy, PartialEq)]

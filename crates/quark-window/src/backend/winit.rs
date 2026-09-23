@@ -1,5 +1,7 @@
 use crate::application::Application;
-use crate::{KeyInput, KeyState, MouseMotion, Window, WindowDescriptor, WindowSize};
+use crate::{
+  ButtonState, KeyInput, MouseButtonInput, MouseMotion, Window, WindowDescriptor, WindowSize,
+};
 use winit::application::ApplicationHandler;
 use winit::dpi::PhysicalSize;
 use winit::event::{DeviceEvent, DeviceId, ElementState, WindowEvent};
@@ -93,8 +95,8 @@ impl<A: Application> ApplicationHandler for App<A> {
         };
 
         let state = match event.state {
-          ElementState::Pressed => KeyState::Pressed,
-          ElementState::Released => KeyState::Released,
+          ElementState::Pressed => ButtonState::Pressed,
+          ElementState::Released => ButtonState::Released,
         };
 
         self.application.key_input(
@@ -105,6 +107,20 @@ impl<A: Application> ApplicationHandler for App<A> {
             repeat: event.repeat,
           },
         )
+      }
+      WindowEvent::MouseInput { state, button, .. } => {
+        let Some(window) = &self.window else {
+          return;
+        };
+
+        let state = match state {
+          ElementState::Pressed => ButtonState::Pressed,
+          ElementState::Released => ButtonState::Released,
+        };
+
+        self
+          .application
+          .mouse_button_input(window, MouseButtonInput { button, state })
       }
       _ => {}
     }

@@ -7,7 +7,9 @@ mod window;
 
 pub use application::Application;
 pub use descriptor::WindowDescriptor;
-pub use input::{KeyCode, KeyInput, KeyState, MouseMotion};
+pub use input::{
+  ButtonState, KeyCode, KeyInput, KeyState, MouseButton, MouseButtonInput, MouseMotion,
+};
 pub use size::WindowSize;
 pub use window::Window;
 
