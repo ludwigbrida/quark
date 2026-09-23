@@ -27,6 +27,10 @@ impl Window {
     }
   }
 
+  pub fn set_visible(&self, visible: bool) {
+    self.inner.set_visible(visible);
+  }
+
   pub fn request_redraw(&self) {
     self.inner.request_redraw();
   }

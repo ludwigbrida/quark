@@ -40,7 +40,8 @@ impl<A: Application> ApplicationHandler for App<A> {
       .with_inner_size(PhysicalSize::new(
         self.descriptor.inner_size.width,
         self.descriptor.inner_size.height,
-      ));
+      ))
+      .with_visible(self.descriptor.visible);
 
     let window = Window::new(
       event_loop
