@@ -1,9 +1,10 @@
 use crate::application::Application;
-use crate::{Window, WindowDescriptor, WindowSize};
+use crate::{KeyInput, KeyState, MouseMotion, Window, WindowDescriptor, WindowSize};
 use winit::application::ApplicationHandler;
 use winit::dpi::PhysicalSize;
-use winit::event::WindowEvent;
+use winit::event::{DeviceEvent, DeviceId, ElementState, WindowEvent};
 use winit::event_loop::{ActiveEventLoop, EventLoop};
+use winit::keyboard::PhysicalKey;
 use winit::window::{Window as WinitWindow, WindowId};
 
 pub fn run(descriptor: WindowDescriptor, application: impl Application + 'static) {
@@ -14,6 +15,7 @@ pub fn run(descriptor: WindowDescriptor, application: impl Application + 'static
       descriptor,
       application,
       window: None,
+      focused: false,
     })
     .expect("event loop failed");
 }
@@ -22,6 +24,7 @@ struct App<A> {
   descriptor: WindowDescriptor,
   application: A,
   window: Option<Window>,
+  focused: bool,
 }
 
 impl<A: Application> ApplicationHandler for App<A> {
@@ -73,8 +76,60 @@ impl<A: Application> ApplicationHandler for App<A> {
           );
         }
       }
+      WindowEvent::Focused(focused) => {
+        self.focused = focused;
+
+        if let Some(window) = &self.window {
+          self.application.focus_changed(window, focused);
+        }
+      }
+      WindowEvent::KeyboardInput { event, .. } => {
+        let Some(window) = &self.window else {
+          return;
+        };
+
+        let PhysicalKey::Code(code) = event.physical_key else {
+          return;
+        };
+
+        let state = match event.state {
+          ElementState::Pressed => KeyState::Pressed,
+          ElementState::Released => KeyState::Released,
+        };
+
+        self.application.key_input(
+          window,
+          KeyInput {
+            code,
+            state,
+            repeat: event.repeat,
+          },
+        )
+      }
       _ => {}
     }
+  }
+
+  fn device_event(
+    &mut self,
+    _event_loop: &ActiveEventLoop,
+    _device_id: DeviceId,
+    event: DeviceEvent,
+  ) {
+    if !self.focused {
+      return;
+    }
+
+    let (Some(window), DeviceEvent::MouseMotion { delta }) = (&self.window, event) else {
+      return;
+    };
+
+    self.application.mouse_motion(
+      window,
+      MouseMotion {
+        delta: [delta.0, delta.1],
+      },
+    )
   }
 
   fn about_to_wait(&mut self, _event_loop: &ActiveEventLoop) {
