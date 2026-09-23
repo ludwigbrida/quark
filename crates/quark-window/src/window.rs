@@ -3,7 +3,8 @@ use raw_window_handle::{
   DisplayHandle, HandleError, HasDisplayHandle, HasWindowHandle, WindowHandle,
 };
 use std::sync::Arc;
-use winit::window::Window as WinitWindow;
+use winit::error::ExternalError;
+use winit::window::{CursorGrabMode, Window as WinitWindow};
 
 #[derive(Clone)]
 pub struct Window {
@@ -28,6 +29,19 @@ impl Window {
 
   pub fn request_redraw(&self) {
     self.inner.request_redraw();
+  }
+
+  pub fn set_pointer_locked(&self, locked: bool) -> Result<(), ExternalError> {
+    let grab_mode = if locked {
+      CursorGrabMode::Locked
+    } else {
+      CursorGrabMode::None
+    };
+
+    self.inner.set_cursor_grab(grab_mode)?;
+    self.inner.set_cursor_visible(!locked);
+
+    Ok(())
   }
 }
 
