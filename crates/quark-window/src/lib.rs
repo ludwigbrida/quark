@@ -1,11 +1,13 @@
 mod application;
 mod backend;
 mod descriptor;
+mod input;
 mod size;
 mod window;
 
 pub use application::Application;
 pub use descriptor::WindowDescriptor;
+pub use input::{KeyCode, KeyInput, KeyState, MouseMotion};
 pub use size::WindowSize;
 pub use window::Window;
 
