@@ -4,4 +4,5 @@ pub struct WindowDescriptor {
   pub title: String,
   pub inner_size: WindowSize,
   pub visible: bool,
+  pub maximized: bool,
 }

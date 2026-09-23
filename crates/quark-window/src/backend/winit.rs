@@ -41,7 +41,8 @@ impl<A: Application> ApplicationHandler for App<A> {
         self.descriptor.inner_size.width,
         self.descriptor.inner_size.height,
       ))
-      .with_visible(self.descriptor.visible);
+      .with_visible(self.descriptor.visible)
+      .with_maximized(self.descriptor.maximized);
 
     let window = Window::new(
       event_loop
